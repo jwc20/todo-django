@@ -9,32 +9,46 @@ import axios from "axios";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const url = "http://127.0.0.1:8000/api/";
 
-  useEffect(() => {
-    getAllTodos();
-  }, []);
+
 
   const getAllTodos = async () => {
     axios
       .get(url)
       .then((response) => {
+        setIsLoading(false);
         const allTodos = response.data;
+        console.log(allTodos)
         setTodos(allTodos);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        setIsLoading(false);
+        setIsError(true); 
+        console.log(error);
+      });
   };
 
+  useEffect(() => {
+    getAllTodos();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
 
   return (
     <div>
-      {todos.map((item, index) => (
+      {todos && todos.map((item, index) => (
         <div key={item.id}>
           <h1>{item.title}</h1>
           <p>{item.body}</p>
         </div>
       ))}
+      {isError && <div>Error fetching data.</div>}
     </div>
   );
 }
