@@ -13,25 +13,21 @@ function App() {
   const [isError, setIsError] = useState(false);
   const url = "http://127.0.0.1:8000/api/";
 
-
-
-  const getAllTodos = async () => {
-    axios
-      .get(url)
-      .then((response) => {
-        setIsLoading(false);
-        const allTodos = response.data;
-        console.log(allTodos)
-        setTodos(allTodos);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        setIsError(true); 
-        console.log(error);
-      });
-  };
-
   useEffect(() => {
+    const getAllTodos = async () => {
+      try {
+        const response = await axios.get(url)
+          setIsLoading(false);
+          const allTodos = response.data;
+          console.log(allTodos)
+          setTodos(allTodos);
+        } catch (error){
+          setIsLoading(false);
+          setIsError(true); 
+          console.log(error);
+        };
+    };
+
     getAllTodos();
   }, []);
 
