@@ -1,4 +1,4 @@
-from django.settings import models
+from django.db import models
 
 
 class Todo(models.Model):
